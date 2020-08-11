@@ -10,7 +10,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef enum : NSUInteger {
+    FilterTypeSplitScreen = 0,
+    FilterTypeGrayAndMosic,
+} FilterType;
+
 @interface FilterViewController : UIViewController
+@property (nonatomic, assign) FilterType fiterType;
 
 @end
 

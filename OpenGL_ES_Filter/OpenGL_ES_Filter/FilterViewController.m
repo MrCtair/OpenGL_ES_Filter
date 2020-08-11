@@ -71,10 +71,33 @@ typedef struct {
     [self prepareForAction];
 }
 - (void)prepareForData{
-    _dataSource = @[@"原图", @"二分屏", @"三分屏", @"四分屏", @"六分屏", @"九分屏"];
+    switch (_fiterType) {
+        case 0:
+            _dataSource = @[@"原图", @"二分屏", @"三分屏", @"四分屏", @"六分屏", @"九分屏"];
+            break;
+        case 1:
+            _dataSource = @[@"原图", @"灰度", @"正方形马赛克", @"六边形马赛克", @"三角形马赛克"];
+            break;
+            
+        default:
+            break;
+    }
+    
+    
     
 }
 - (void)prepareForView{
+    switch (_fiterType) {
+        case 0:
+            self.navigationItem.title = @"分屏滤镜";
+            break;
+        case 1:
+            self.navigationItem.title = @"灰度/马赛克";
+            break;
+            
+        default:
+            break;
+    }
     self.view.backgroundColor = [UIColor whiteColor];
     [self setUpFilterBar];
     [self filterInit];

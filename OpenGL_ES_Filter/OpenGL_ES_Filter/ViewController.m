@@ -60,6 +60,7 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     FilterViewController * filterVC = [[FilterViewController alloc] init];
+    filterVC.fiterType = indexPath.row;
     [self.navigationController pushViewController:filterVC animated:YES];
 }
 
