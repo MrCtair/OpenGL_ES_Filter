@@ -81,7 +81,12 @@ typedef struct {
                             @{@"title":@"九分屏", @"shaderName":@"SplitScreen_9"}];
             break;
         case 1:
-            _dataSource = @[@"原图", @"灰度", @"正方形马赛克", @"六边形马赛克", @"三角形马赛克"];
+            _dataSource = @[@{@"title":@"原图", @"shaderName":@"Normal"},
+                            @{@"title":@"灰度", @"shaderName":@"Gray"},
+                            @{@"title":@"颠倒", @"shaderName":@"Reversal"},
+                            @{@"title":@"矩形马赛克", @"shaderName":@"SquareMosaic"},
+                            @{@"title":@"六边形马赛克", @"shaderName":@"HexagonMosaic"},
+                            @{@"title":@"三角形马赛克", @"shaderName":@"TriangleMosaic"},];
             break;
             
         default:
@@ -159,7 +164,7 @@ typedef struct {
     glBufferData(GL_ARRAY_BUFFER, bufferSizeiptr, self.vertexs, GL_STATIC_DRAW);
     
     // 设置默认着色器
-    [self setupNormalShaderProgram];
+    [self setupShaderProgramWithName:_dataSource.firstObject[@"shaderName"]];
     
     // 将顶点缓存保存，退出时才释放
     self.vertextBuffer = vertexBuffer;
@@ -258,39 +263,6 @@ typedef struct {
     //渲染到屏幕上
     [self.context presentRenderbuffer:GL_RENDERBUFFER];
 }
-
-#pragma mark -- 着色器切换
-// 默认着色器程序
-- (void)setupNormalShaderProgram {
-    //设置着色器程序
-    [self setupShaderProgramWithName:@"Normal"];
-}
-
-// 分屏(2屏)
-- (void)setupSplitScreen_2ShaderProgram {
-    [self setupShaderProgramWithName:@"SplitScreen_2"];
-}
-
-// 分屏(3屏)
-- (void)setupSplitScreen_3ShaderProgram {
-    [self setupShaderProgramWithName:@"SplitScreen_3"];
-}
-
-// 分屏(4屏)
-- (void)setupSplitScreen_4ShaderProgram {
-    [self setupShaderProgramWithName:@"SplitScreen_4"];
-}
-
-//分屏(6屏)
-- (void)setupSplitScreen_6ShaderProgram{
-    [self setupShaderProgramWithName:@"SplitScreen_6"];
-}
-
-//分屏(9分屏)
-- (void)setupSplitScreen_9ShaderProgram{
-    [self setupShaderProgramWithName:@"SplitScreen_9"];
-}
-
 
 #pragma mark — FilterBar
 - (void)setUpFilterBar{
