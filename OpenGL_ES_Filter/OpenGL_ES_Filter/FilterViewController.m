@@ -73,7 +73,12 @@ typedef struct {
 - (void)prepareForData{
     switch (_fiterType) {
         case 0:
-            _dataSource = @[@"原图", @"二分屏", @"三分屏", @"四分屏", @"六分屏", @"九分屏"];
+            _dataSource = @[@{@"title":@"原图", @"shaderName":@"Normal"},
+                            @{@"title":@"二分屏", @"shaderName":@"SplitScreen_2"},
+                            @{@"title":@"三分屏", @"shaderName":@"SplitScreen_3"},
+                            @{@"title":@"四分屏", @"shaderName":@"SplitScreen_4"},
+                            @{@"title":@"六分屏", @"shaderName":@"SplitScreen_6"},
+                            @{@"title":@"九分屏", @"shaderName":@"SplitScreen_9"}];
             break;
         case 1:
             _dataSource = @[@"原图", @"灰度", @"正方形马赛克", @"六边形马赛克", @"三角形马赛克"];
@@ -293,49 +298,18 @@ typedef struct {
     FilterBar *filerBar = [[FilterBar alloc] initWithFrame:CGRectMake(0, filterBarY, SCREENWIDTH, FILTERBARHEIGHT)];
     filerBar.delegate = self;
     [self.view addSubview:filerBar];
-    filerBar.itemList = _dataSource;
+    NSMutableArray * itemList = [NSMutableArray array];
+    for (NSDictionary * info in _dataSource) {
+        [itemList addObject:info[@"title"]];
+    }
+    filerBar.itemList = itemList;
 }
 
 #pragma mark - FilterBarDelegate
 
 - (void)filterBar:(FilterBar *)filterBar didScrollToIndex:(NSUInteger)index {
-    //1. 选择默认shader
-    switch (index) {
-        case 0:
-            [self setupNormalShaderProgram];
-            break;
-        case 1:
-            [self setupSplitScreen_2ShaderProgram];
-            break;
-        case 2:
-            [self setupSplitScreen_3ShaderProgram];
-            break;
-        case 3:
-            [self setupSplitScreen_4ShaderProgram];
-            break;
-        case 4:
-            [self setupSplitScreen_6ShaderProgram];
-            break;
-        case 5:
-            [self setupSplitScreen_9ShaderProgram];
-            break;
-        
-            
-        default:
-            break;
-    }
-    if (index == 0) {
-        [self setupNormalShaderProgram];
-    }else if(index == 1)
-    {
-        [self setupSplitScreen_2ShaderProgram];
-    }else if(index == 2)
-    {
-        [self setupSplitScreen_3ShaderProgram];
-    }else if(index == 3)
-    {
-        [self setupSplitScreen_4ShaderProgram];
-    }
+    
+    [self setupShaderProgramWithName:_dataSource[index][@"shaderName"]];
     // 重新开始滤镜动画
     [self startFilerAnimation];
 }
